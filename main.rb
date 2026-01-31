@@ -25,7 +25,7 @@ def playComputer(game)
         game.create_board
         game.display_board
         computer_pick = '' 
-        1..4.times do |i|
+        4.times do |i|
             computer_pick += rand(1..6).to_s # random number generation
         end
         # puts computer_pick 

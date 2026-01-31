@@ -1,27 +1,28 @@
 require_relative 'monkey_patch.rb'
 require_relative "variables.rb"
+require_relative 'board'
 
 class Game
     # attr_accessor :board
     def initialize
-        @board = []
+        @board = Board.new
     end
-    def create_board(numb_of_turns = 6)
-        @board.clear
-        1..numb_of_turns.times {|i| @board.push($a_ball.clone)}#deep clone the $a_ball hash(pass by value)
-    end
-    def display_board
-        numb_of_turns = @board.length 
-        space = ' '
-        for i in 0...numb_of_turns
-         puts "#{TOP_LEFT}#{HORIZONTAL*26}#{TOP_RIGHT}" + "#{TOP_LEFT}#{HORIZONTAL*13}#{TOP_RIGHT}\n" +
-          "#{VERTICAL}#{space*2}#{@board[i]['ball1']}#{space*5}#{@board[i]['ball2']}#{space*5}#{@board[i]['ball3']}#{space*5} #{@board[i]['ball4']}#{space*4}#{VERTICAL}" +
-          "#{VERTICAL} #{@board[i]['v_ball1']}#{space*2}#{@board[i]['v_ball2']}#{space*2}#{@board[i]['v_ball3']}#{space*2}#{@board[i]['v_ball4']}#{space*2}#{VERTICAL}\n" +
-          "#{LOW_LEFT}#{HORIZONTAL*26}#{LOW_RIGHT}" + "#{LOW_LEFT}#{HORIZONTAL*13}#{LOW_RIGHT}\n"
-        end
-        puts "Available colours: "
-        $ha.keys.each{|key| print $ha[key], " "}
-    end
+    # def create_board(numb_of_turns = 6)
+    #     @board.clear
+    #     1..numb_of_turns.times {|i| @board.push($a_ball.clone)}#deep clone the $a_ball hash(pass by value)
+    # end
+    # def display_board
+    #     numb_of_turns = @board.length 
+    #     space = ' '
+    #     for i in 0...numb_of_turns
+    #      puts "#{TOP_LEFT}#{HORIZONTAL*26}#{TOP_RIGHT}" + "#{TOP_LEFT}#{HORIZONTAL*13}#{TOP_RIGHT}\n" +
+    #       "#{VERTICAL}#{space*2}#{@board[i]['ball1']}#{space*5}#{@board[i]['ball2']}#{space*5}#{@board[i]['ball3']}#{space*5} #{@board[i]['ball4']}#{space*4}#{VERTICAL}" +
+    #       "#{VERTICAL} #{@board[i]['v_ball1']}#{space*2}#{@board[i]['v_ball2']}#{space*2}#{@board[i]['v_ball3']}#{space*2}#{@board[i]['v_ball4']}#{space*2}#{VERTICAL}\n" +
+    #       "#{LOW_LEFT}#{HORIZONTAL*26}#{LOW_RIGHT}" + "#{LOW_LEFT}#{HORIZONTAL*13}#{LOW_RIGHT}\n"
+    #     end
+    #     puts "Available colours: "
+    #     $ha.keys.each{|key| print $ha[key], " "}
+    # end
     def guesser_win?(index)
         v_ball_red = "\e[31m\u25CF\e[0m"
         end_game = true 
