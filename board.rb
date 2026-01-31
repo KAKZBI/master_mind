@@ -2,12 +2,11 @@ require 'colorize'
 # require 'pry-byebug'
 
 class Board
-  # Use Constants for fixed data
   BALLS = {
     empty: "\u25ef",
     white: "\u2b24",
     green: "\u2b24".green,
-    purple: "\u2b24".magenta,
+    magenta: "\u2b24".magenta,
     red: "\u2b24".red,
     yellow: "\u2b24".yellow,
     blue: "\u2b24".blue
