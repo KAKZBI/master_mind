@@ -64,10 +64,16 @@ class Board
   # def self.color_menu
   #   COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(" | ")
   # end
-  def update(index, guess)
-
+  def update(index, input)
+    input_array = input.split('')
+    row = @grid[index]
+    input_array.each_with_index do |digit, i|
+      row[:balls][i] = BALLS[COLOR_MAP[digit]]
+    end
   end
 end
 # puts Board.color_menu
-# puts Board.new
+b =  Board.new
+b.update(0,'2341')
+puts b
 # p "Available colors: #{Board.colors}"
