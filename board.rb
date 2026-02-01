@@ -2,16 +2,14 @@ require 'colorize'
 # require 'pry-byebug'
 
 class Board
-  BALLS = {
-    empty: "\u25ef",
-    white: "\u2b24",
-    green: "\u2b24".green,
-    magenta: "\u2b24".magenta,
-    red: "\u2b24".red,
-    yellow: "\u2b24".yellow,
-    blue: "\u2b24".blue
-  }.freeze
 
+  # The "Source of Truth" - 6 fixed colors
+  AVAILABLE_COLORS = [:red, :green, :blue, :yellow, :magenta, :white].freeze
+
+  # Automatically build the BALLS hash using the colors above
+  BALLS = AVAILABLE_COLORS.each_with_object({ empty: "\u25ef" }) do |color, hash|
+    hash[color] = "\u2b24".send(color)
+  end.freeze
   PEGS = {
     empty: "\u25cb",
     white: "\u25cf",
@@ -41,6 +39,10 @@ class Board
     end
   end
 
+  def self.colors
+    AVAILABLE_COLORS #.map { |color| color.to_s.colorize(color) }.join(", ")
+  end
+  
   def to_s
     header = TOP_LEFT + (HORIZONTAL * 16) + TOP_RIGHT
     footer = LOW_LEFT + (HORIZONTAL * 16) + LOW_RIGHT
@@ -57,3 +59,4 @@ class Board
 end
 
 puts Board.new
+p "Available colors: #{Board.colors}"

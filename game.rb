@@ -2,9 +2,9 @@ require_relative 'players'
 require_relative 'board'
 class Game
   def initialize()
-    codemaker = ComputerPlayer.new
-    codebreaker = HumanPlayer.new
-    board = Board.new
+    @codemaker = ComputerPlayer.new
+    @codebreaker = HumanPlayer.new
+    @board = Board.new
   end
   def is_valid?(guess)
     return false unless guess.length == 4
