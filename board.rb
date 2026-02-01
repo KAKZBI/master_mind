@@ -16,6 +16,11 @@ class Board
     red: "\e[31m\u25CF\e[0m"
   }.freeze
 
+  # Create a hash: {"1"=>:red, "2"=>:green, ...}
+  COLOR_MAP = AVAILABLE_COLORS.each_with_index.each_with_object({}) do |(color, index), hash|
+    hash[(index + 1).to_s] = color
+  end.freeze
+
   # UI Constants
   TOP_LEFT = "\u250c"
   HORIZONTAL = "\u2500"
@@ -56,7 +61,13 @@ class Board
     # binding.pry
     [header, rows, footer].flatten.join("\n")
   end
-end
+  # def self.color_menu
+  #   COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(" | ")
+  # end
+  def update(index, guess)
 
+  end
+end
+# puts Board.color_menu
 # puts Board.new
 # p "Available colors: #{Board.colors}"
