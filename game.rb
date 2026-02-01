@@ -19,6 +19,9 @@ class Game
       str + " #{i+1} ".send(background_color_symbol) + ' '
     end
   end
+  def feedback
+    
+  end
 end
 
 g = Game.new

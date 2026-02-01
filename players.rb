@@ -1,10 +1,12 @@
 require 'pry-byebug'
 class Player
+  attr_reader :last_input
 end
 
 class HumanPlayer < Player
-  def guess
-    gets.chomp.to_i
+  # attr_reader :last_input
+  def get_input
+    @last_input = gets.chomp#.to_i
   end
 end
 
@@ -14,4 +16,7 @@ class ComputerPlayer < Player
   end 
 end
 
-# p ComputerPlayer.new.make_code
+pp = HumanPlayer.new
+current_guess = pp.get_input
+puts "The variable current_guess is: #{current_guess}"
+puts "The stored @last_input is: #{pp.last_input}"
