@@ -64,7 +64,7 @@ class Board
   # def self.color_menu
   #   COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(" | ")
   # end
-  def update(index, input)
+  def place_colors(index, input)
     input_array = input.split('')
     row = @grid[index]
     input_array.each_with_index do |digit, i|
