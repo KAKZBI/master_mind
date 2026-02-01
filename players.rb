@@ -14,4 +14,4 @@ class ComputerPlayer < Player
   end 
 end
 
-p ComputerPlayer.new.make_code
+# p ComputerPlayer.new.make_code

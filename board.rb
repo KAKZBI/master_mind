@@ -58,5 +58,5 @@ class Board
   end
 end
 
-puts Board.new
-p "Available colors: #{Board.colors}"
+# puts Board.new
+# p "Available colors: #{Board.colors}"
