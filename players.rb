@@ -21,7 +21,7 @@ class HumanPlayer < Player
       raise BadInputError, "Choose 4 digits representing the colors in order." unless is_valid?(input)
       @last_input = input
     rescue BadInputError => e 
-      puts "Invalid choice - #{e.message}".red
+      puts "Invalid choice - #{e.message}".red if max_attempts > 0
       max_attempts -= 1
       puts "Trying " + "#{max_attempts}".red + " more times" if max_attempts > 0
       sleep 1

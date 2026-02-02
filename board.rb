@@ -62,9 +62,9 @@ class Board
     # binding.pry
     [header, rows, footer].flatten.join("\n")
   end
-  # def self.color_menu
-  #   COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(" | ")
-  # end
+  def self.color_menu
+    COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(" | ")
+  end
   def place_colors(index, input)
     input_array = input.split('')
     row = @grid[index]

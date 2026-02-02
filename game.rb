@@ -2,6 +2,7 @@ require_relative 'players'
 require_relative 'board'
 require 'pry-byebug'
 class Game
+  attr_reader :board
   def initialize()
     @codemaker = ComputerPlayer.new
     @codebreaker = HumanPlayer.new
@@ -9,23 +10,24 @@ class Game
     @colors = @board.class.colors
     @last_feedback = []
   end
-  def is_valid?(input)
-    return false unless input.length == 4
-    input.split('').all?{|char| char.to_i.between?(1,6)}
-  end
-  def show_colors 
-    (0...colors.length).reduce('') do |str, i|
+  # def is_valid?(input)
+  #   return false unless input.length == 4
+  #   input.split('').all?{|char| char.to_i.between?(1,6)}
+  # end
+  # Return a string containing all colors represented by a digit between 1 and 6 inclusive
+  def colors_map 
+    (0...@colors.length).reduce('') do |str, i|
       color_symbol = @colors[i]
       background_color_symbol = "on_#{color_symbol.to_s}".to_sym
       str + " #{i+1} ".send(background_color_symbol) + ' '
     end
   end
+  # Return an array containing symbols representing feedback
   def feedback
     guess = @codebreaker.last_input
     code = @codemaker.code
     @last_feedback = []
     code_hash = code.split('').each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
-    # guess_hash = guess.each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
     for i in 0..guess.length
       if code_hash[guess[i]] > 0
         code_hash[guess[i]] -= 1
@@ -38,10 +40,21 @@ class Game
     end
     @last_feedback
   end
+  # Determine if the Code guesser has won
   def guesser_win?
     @last_feedback == [:red, :red, :red, :red]
+  end
+  def take_guess
+    # binding.pry
+    puts "Available colors: #{colors_map}"  if @codebreaker.class == HumanPlayer
+    begin
+      @codebreaker.make_guess
+    rescue PermanentFailureError => e 
+        puts e.message
+        return # exit(1)
+    end
   end
 end
 
 # g = Game.new
-# p g.feedback
+# puts g.take_guess
