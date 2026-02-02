@@ -20,9 +20,24 @@ class Game
     end
   end
   def feedback
-    
+    guess ='2426'# @codebreaker.last_input
+    code ='4251'# @codemaker.code
+    feed = []
+    code_hash = code.split('').each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
+    # guess_hash = guess.each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
+    for i in 0..guess.length
+      if code_hash[guess[i]] > 0
+        code_hash[guess[i]] -= 1
+        if code[i] == guess[i]
+          feed.unshift(:red)
+        else
+          feed.push(:white)
+        end
+      end
+    end
+    feed
   end
 end
 
 g = Game.new
-puts "Available colors: #{g.show_colors}"
+p g.feedback

@@ -71,9 +71,12 @@ class Board
       row[:balls][i] = BALLS[COLOR_MAP[digit]]
     end
   end
+  def place_pegs(feed)
+    
+  end
 end
 # puts Board.color_menu
-b =  Board.new
-b.update(0,'2341')
-puts b
+# b =  Board.new
+# b.update(0,'2341')
+# puts b
 # p "Available colors: #{Board.colors}"

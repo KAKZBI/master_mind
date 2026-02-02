@@ -1,6 +1,6 @@
 require 'pry-byebug'
 class Player
-  attr_reader :last_input
+  attr_reader :last_input, :code
 end
 
 class HumanPlayer < Player
@@ -16,7 +16,7 @@ class ComputerPlayer < Player
   end 
 end
 
-pp = HumanPlayer.new
-current_guess = pp.get_input
-puts "The variable current_guess is: #{current_guess}"
-puts "The stored @last_input is: #{pp.last_input}"
+# pp = HumanPlayer.new
+# current_guess = pp.get_input
+# puts "The variable current_guess is: #{current_guess}"
+# puts "The stored @last_input is: #{pp.last_input}"
