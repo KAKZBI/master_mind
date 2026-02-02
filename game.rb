@@ -38,7 +38,9 @@ class Game
     end
     @last_feedback
   end
-  
+  def guesser_win?
+    @last_feedback == [:red, :red, :red, :red]
+  end
 end
 
 # g = Game.new
