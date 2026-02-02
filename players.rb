@@ -1,12 +1,36 @@
 require 'pry-byebug'
+require 'colorize'
+class PermanentFailureError < StandardError; end
+class BadInputError < StandardError; end
+
 class Player
   attr_reader :last_input, :code
 end
 
 class HumanPlayer < Player
-  # attr_reader :last_input
   def get_input
     @last_input = gets.chomp#.to_i
+  end
+  def make_guess
+    max_attempts = 3
+    begin
+      raise PermanentFailureError, "Sorry - Game aborted" if max_attempts == 0
+      puts "Select 4 colors by number:"
+      # get_input
+      input = gets.chomp
+      raise BadInputError, "Choose 4 digits representing the colors in order." unless is_valid?(input)
+      @last_input = input
+    rescue BadInputError => e 
+      puts "Invalid choice - #{e.message}".red
+      max_attempts -= 1
+      puts "Trying " + "#{max_attempts}".red + " more times" if max_attempts > 0
+      sleep 1
+      retry 
+    end
+  end
+  def is_valid?(input)
+    return false unless input.length == 4
+    input.split('').all?{|char| char.to_i.between?(1,6)}
   end
 end
 
@@ -17,6 +41,6 @@ class ComputerPlayer < Player
 end
 
 # pp = HumanPlayer.new
-# current_guess = pp.get_input
+# current_guess = pp.make_guess
 # puts "The variable current_guess is: #{current_guess}"
 # puts "The stored @last_input is: #{pp.last_input}"
