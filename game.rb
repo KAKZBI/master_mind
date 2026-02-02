@@ -7,6 +7,7 @@ class Game
     @codebreaker = HumanPlayer.new
     @board = Board.new
     @colors = @board.class.colors
+    @last_feedback = []
   end
   def is_valid?(input)
     return false unless input.length == 4
@@ -20,24 +21,25 @@ class Game
     end
   end
   def feedback
-    guess ='2426'# @codebreaker.last_input
-    code ='4251'# @codemaker.code
-    feed = []
+    guess = @codebreaker.last_input
+    code = @codemaker.code
+    @last_feedback = []
     code_hash = code.split('').each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
     # guess_hash = guess.each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
     for i in 0..guess.length
       if code_hash[guess[i]] > 0
         code_hash[guess[i]] -= 1
         if code[i] == guess[i]
-          feed.unshift(:red)
+          @last_feedback.unshift(:red)
         else
-          feed.push(:white)
+          @last_feedback.push(:white)
         end
       end
     end
-    feed
+    @last_feedback
   end
+  
 end
 
-g = Game.new
-p g.feedback
+# g = Game.new
+# p g.feedback

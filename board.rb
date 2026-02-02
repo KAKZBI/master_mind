@@ -71,12 +71,17 @@ class Board
       row[:balls][i] = BALLS[COLOR_MAP[digit]]
     end
   end
-  def place_pegs(feed)
-    
+  def place_pegs(index, feedback)
+    return unless feedback.length > 0
+    row = @grid[index]
+    feedback.each_with_index do |sym, idx|
+      row[:pegs][idx] = PEGS[sym]
+    end
   end
 end
 # puts Board.color_menu
 # b =  Board.new
-# b.update(0,'2341')
+# b.place_colors(2,'2341')
+# b.place_pegs(2,[:red, :red, :white])
 # puts b
 # p "Available colors: #{Board.colors}"
