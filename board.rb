@@ -29,14 +29,15 @@ class Board
   LOW_LEFT = "\u2514"
   LOW_RIGHT = "\u2518"
 
-  def initialize(rounds = 12)
-    @grid = create_grid(rounds)
+  def initialize(size = 12)
+    @grid = create_grid(size)
+    @size = size
     # binding.pry
   end
 
-  def create_grid(rounds)
+  def create_grid(size)
     # Using symbols like :empty to match the BALLS hash
-    Array.new(rounds) do
+    Array.new(size) do
       {
         balls: Array.new(4, BALLS[:empty]),
         pegs: Array.new(4, PEGS[:empty])
