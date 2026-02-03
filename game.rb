@@ -15,6 +15,11 @@ class Game
   #   input.split('').all?{|char| char.to_i.between?(1,6)}
   # end
   # Return a string containing all colors represented by a digit between 1 and 6 inclusive
+  def start
+    puts @board
+    puts "COLOR MENU"
+    puts @board.color_menu
+  end
   def colors_map 
     (0...@colors.length).reduce('') do |str, i|
       color_symbol = @colors[i]

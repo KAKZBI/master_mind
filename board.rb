@@ -10,6 +10,7 @@ class Board
   BALLS = AVAILABLE_COLORS.each_with_object({ empty: "\u25ef" }) do |color, hash|
     hash[color] = "\u2b24".send(color)
   end.freeze
+  # Used for feedback
   PEGS = {
     empty: "\u25cb",
     white: "\u25cf",
@@ -29,6 +30,7 @@ class Board
   LOW_LEFT = "\u2514"
   LOW_RIGHT = "\u2518"
 
+  attr_reader :size
   def initialize(size = 12)
     @grid = create_grid(size)
     @size = size
