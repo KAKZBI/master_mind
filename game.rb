@@ -17,8 +17,8 @@ class Game
   # Return a string containing all colors represented by a digit between 1 and 6 inclusive
   def start
     puts @board
-    puts "COLOR MENU"
-    puts @board.color_menu
+    puts "\n************COLOR MENU*************"
+    puts @board.class.color_menu
     @codemaker.make_code
   end
   def run 
@@ -75,6 +75,9 @@ class Game
         puts e.message
         return # exit(1)
     end
+  end
+  def clear_screen
+    system('clear') || system('cls')
   end
 end
 
