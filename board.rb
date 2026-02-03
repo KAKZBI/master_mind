@@ -82,9 +82,4 @@ class Board
     end
   end
 end
-# puts Board.color_menu
-# b =  Board.new
-# b.place_colors(2,'2341')
-# b.place_pegs(2,[:red, :red, :white])
-# puts b
-# p "Available colors: #{Board.colors}"
+

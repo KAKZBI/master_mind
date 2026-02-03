@@ -17,8 +17,9 @@ class Game
   # Return a string containing all colors represented by a digit between 1 and 6 inclusive
   def start
     puts @board
-    puts "\n************COLOR MENU*************"
+    puts "\n************ COLOR MENU *************"
     puts @board.class.color_menu
+    puts
     @codemaker.make_code
   end
   def run 
@@ -28,6 +29,7 @@ class Game
       guess = self.take_guess
       @board.place_colors(round - 1, guess)
       @board.place_pegs(round - 1, self.feedback)
+      sleep(1)
       self.clear_screen
       puts @board
       round += 1
@@ -69,12 +71,12 @@ class Game
   def take_guess
     # binding.pry
     puts "Available colors: #{colors_map}"  if @codebreaker.class == HumanPlayer
-    begin
+    # begin
       @codebreaker.make_guess
-    rescue PermanentFailureError => e 
-        puts e.message
-        return # exit(1)
-    end
+    # rescue PermanentFailureError => e 
+    #     puts e.message
+    #     return # exit(1)
+    # end
   end
   def clear_screen
     system('clear') || system('cls')
