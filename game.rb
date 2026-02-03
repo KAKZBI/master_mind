@@ -20,6 +20,18 @@ class Game
     puts "COLOR MENU"
     puts @board.color_menu
   end
+  def run 
+    round = 1
+    until self.guesser_win? || round > @board.size
+      guess = self.take_guess
+      @board.place_colors(round - 1, guess)
+      @board.place_pegs(round - 1, self.feedback)
+      self.clear_screen
+      puts @board
+      round += 1
+      @verdict = "You win" if guesser_win?
+    end
+  end
   def colors_map 
     (0...@colors.length).reduce('') do |str, i|
       color_symbol = @colors[i]
