@@ -19,9 +19,11 @@ class Game
     puts @board
     puts "COLOR MENU"
     puts @board.color_menu
+    @codemaker.make_code
   end
   def run 
     round = 1
+    @verdict = "You lost"
     until self.guesser_win? || round > @board.size
       guess = self.take_guess
       @board.place_colors(round - 1, guess)
@@ -31,6 +33,9 @@ class Game
       round += 1
       @verdict = "You win" if guesser_win?
     end
+  end
+  def result
+    "#{@verdict} - code is #{@codemaker.code}"
   end
   def colors_map 
     (0...@colors.length).reduce('') do |str, i|
