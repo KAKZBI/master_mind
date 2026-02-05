@@ -28,7 +28,7 @@ class HumanPlayer < Player
       retry 
     end
     def make_code
-      make_guess
+      @code = make_guess
     end
   end
   def is_valid?(input)
@@ -41,4 +41,7 @@ class ComputerPlayer < Player
   def make_code
     @code = (1..4).reduce(''){|str, i| str + rand(1..6).to_s}
   end 
+  def make_guess
+    @last_input = (1..4).reduce(''){|str, i| str + rand(1..6).to_s}
+  end
 end
