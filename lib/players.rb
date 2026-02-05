@@ -27,6 +27,9 @@ class HumanPlayer < Player
       sleep 0.5
       retry 
     end
+    def make_code
+      make_guess
+    end
   end
   def is_valid?(input)
     return false unless input.length == 4
