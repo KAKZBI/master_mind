@@ -8,6 +8,7 @@ class Game
   def initialize()
     self.greetings
     self.set_roles(self.ask_role)
+    # binding.pry
     @board = Board.new
     @colors = @board.class.colors
     @last_feedback = []
@@ -22,10 +23,10 @@ class Game
     @codemaker.make_code
   end
   def greetings
-    puts "You can either bee the code Maker or the code Breaker."
+    puts "You can either be the code Maker or the code Breaker."
     puts "Possible choices: \n"\
          "Code Maker: m or M\n"\
-         "Code Breaker: b or M"
+         "Code Breaker: b or B"
     puts "Any other choice is invalid\n"
   end
 
@@ -80,21 +81,34 @@ class Game
   end
   # Return an array containing symbols representing feedback
   def feedback
-    guess = @codebreaker.last_input
-    code = @codemaker.code
-    @last_feedback = []
-    code_hash = code.split('').each_with_object(Hash.new(0)){|char, hash| hash[char] += 1}
-    for i in 0..guess.length
-      if code_hash[guess[i]] > 0
-        code_hash[guess[i]] -= 1
-        if code[i] == guess[i]
-          @last_feedback.unshift(:red)
-        else
-          @last_feedback.push(:white)
+      guess_chars = @codebreaker.last_input.chars
+      code_chars = @codemaker.code.chars
+      @last_feedback = []
+      
+      #hash for char occurences
+      code_counts = code_chars.tally 
+      matched_indices = []
+
+      # First Pass: Red Pegs
+      guess_chars.each_with_index do |char, i|
+        if char == code_chars[i]
+          @last_feedback << :red
+          code_counts[char] -= 1
+          matched_indices << i
         end
       end
-    end
-    @last_feedback
+
+      # Second Pass: White Pegs
+      guess_chars.each_with_index do |char, i|
+        next if matched_indices.include?(i)
+
+        if code_counts[char].to_i > 0
+          @last_feedback << :white
+          code_counts[char] -= 1
+        end
+      end
+
+      @last_feedback
   end
   # Determine if the Code guesser has won
   def guesser_win?
@@ -108,6 +122,7 @@ class Game
     system('clear') || system('cls')
   end
 end
-g = Game.new
-g.greetings
-g.ask_role
+# g = Game.new
+# p g.feedback
+# g.greetings
+# g.ask_role
