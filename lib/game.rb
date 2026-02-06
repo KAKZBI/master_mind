@@ -19,6 +19,13 @@ class Game
     puts
     @codemaker.make_code
   end
+  def greetings
+    puts "You can either bee the code Maker or the code Breaker."
+    puts "Possible choices: \n"\
+         "Code Maker: m or M\n"\
+         "Code Breaker: b or M"
+    puts "Any other choice is invalid\n"
+  end
   def run 
     round = 1
     @verdict = "You lost"
@@ -73,3 +80,5 @@ class Game
     system('clear') || system('cls')
   end
 end
+g = Game.new
+g.greetings
