@@ -44,6 +44,16 @@ class Game
       retry 
     end
   end
+
+  def set_roles(choice)
+    if choice == 'm'
+      @codemaker = HumanPlayer.new
+      @codebreaker = ComputerPlayer.new
+    elsif choice == 'b'
+      @codemaker = ComputerPlayer.new
+      @codebreaker = HumanPlayer.new
+    end
+  end
   def run 
     round = 1
     @verdict = "You lost"
