@@ -1,9 +1,10 @@
 require_relative "./lib/game.rb"
 
-master_mind = Game.new
 puts "Welcome to the Master Mind game"
-master_mind.start
+
 begin
+  master_mind = Game.new
+  master_mind.start
   master_mind.run
   puts master_mind.result
 rescue PermanentFailureError => e 

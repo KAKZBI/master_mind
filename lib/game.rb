@@ -6,8 +6,8 @@ class BadRoleChoiceError < StandardError; end
 class Game
   attr_reader :board
   def initialize()
-    @codemaker = ComputerPlayer.new
-    @codebreaker = HumanPlayer.new
+    self.greetings
+    self.set_roles(self.ask_role)
     @board = Board.new
     @colors = @board.class.colors
     @last_feedback = []
