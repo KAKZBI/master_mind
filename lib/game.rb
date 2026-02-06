@@ -1,6 +1,8 @@
 require_relative 'players'
 require_relative 'board'
 require 'pry-byebug'
+
+class BadRoleChoiceError < StandardError; end
 class Game
   attr_reader :board
   def initialize()
