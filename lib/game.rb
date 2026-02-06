@@ -28,6 +28,22 @@ class Game
          "Code Breaker: b or M"
     puts "Any other choice is invalid\n"
   end
+
+  def ask_role
+    max_attempts = 3
+    begin
+    raise PermanentFailureError, "Sorry - Game aborted" unless max_attempts > 0
+    print "Choose your role - [M]aker or [B]reaker: "
+    choice = gets.chomp.downcase
+    raise BadRoleChoiceError, "Invalid choice: #{choice}" unless choice.match?(/\A[mb]\z/i)
+    choice
+    rescue BadRoleChoiceError => e
+      max_attempts -= 1
+      puts e.message.colorize(:red) if max_attempts > 0
+      puts "Trying #{max_attempts} more times" if max_attempts > 0
+      retry 
+    end
+  end
   def run 
     round = 1
     @verdict = "You lost"
@@ -84,3 +100,4 @@ class Game
 end
 g = Game.new
 g.greetings
+g.ask_role
