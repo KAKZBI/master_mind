@@ -39,6 +39,10 @@ class HumanPlayer < Player
 end
 
 class ComputerPlayer < Player
+  attr_writer :pretended_intelligence
+  def initialize
+    @pretended_intelligence = []
+  end
   def make_code
     @code = (1..4).reduce(''){|str, i| str + rand(1..6).to_s}
   end 
