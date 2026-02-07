@@ -65,6 +65,7 @@ class Game
       sleep(1)
       self.clear_screen
       puts @board
+      puts "Actual guess: #{guess}" if @codebreaker.class == ComputerPlayer
       round += 1
       @verdict = "Code Breaker Wins" if guesser_win?
     end
