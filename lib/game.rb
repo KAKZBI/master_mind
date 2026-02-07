@@ -57,7 +57,7 @@ class Game
   end
   def run 
     round = 1
-    @verdict = "You lost"
+    @verdict = "Code Breaker Lost"
     until self.guesser_win? || round > @board.size
       guess = self.take_guess
       @board.place_colors(round - 1, guess)
@@ -66,7 +66,7 @@ class Game
       self.clear_screen
       puts @board
       round += 1
-      @verdict = "You win" if guesser_win?
+      @verdict = "Code Breaker Wins" if guesser_win?
     end
   end
   def result
