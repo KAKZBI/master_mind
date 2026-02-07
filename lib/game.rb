@@ -95,6 +95,7 @@ class Game
           @last_feedback << :red
           code_counts[char] -= 1
           matched_indices << i
+          @codebreaker.pretended_intelligence << {red:[i, char]} if @codebreaker.class == ComputerPlayer
         end
       end
 
@@ -105,6 +106,7 @@ class Game
         if code_counts[char].to_i > 0
           @last_feedback << :white
           code_counts[char] -= 1
+          @codebreaker.pretended_intelligence << {white:[i, char]} if @codebreaker.class == ComputerPlayer
         end
       end
 
