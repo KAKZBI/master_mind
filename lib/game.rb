@@ -56,23 +56,40 @@ class Game
     end
   end
   def run 
+    @guess_history = [] # To store the paper trail
     round = 1
     @verdict = "Code Breaker Lost"
     until self.guesser_win? || round > @board.size
       guess = self.take_guess
+      @guess_history << guess # Save the guess
       @board.place_colors(round - 1, guess)
       @board.place_pegs(round - 1, self.feedback)
       sleep(1)
       self.clear_screen
       puts @board
-      puts "Actual guess: #{guess}" if @codebreaker.class == ComputerPlayer
-      sleep(2) if @codebreaker.class == ComputerPlayer
+      puts "Actual guess: #{guess}" if @codebreaker.is_a?(ComputerPlayer)
+      sleep(2) if @codebreaker.is_a?(ComputerPlayer)
+      if guesser_win?
+        @verdict = "Code Breaker Wins"
+        @total_rounds = round # Save the winning round number
+      break
+      end
       round += 1
-      @verdict = "Code Breaker Wins" if guesser_win?
+      @total_rounds = round
     end
   end
   def result
-    "#{@verdict} - code is #{@codemaker.code}"
+    output = "\n--- GAME OVER ---\n"
+    output += "#{@verdict} in #{@total_rounds} rounds!\n"
+    output += "Final Code: #{@codemaker.code}\n"
+    output += "------------------\n"
+    output += "Guess History:\n"
+    
+    @guess_history.each_with_index do |guess, i|
+      output += "Round #{i + 1}: #{guess}\n"
+    end
+    
+    output
   end
   def colors_map 
     (0...@colors.length).reduce('') do |str, i|
@@ -83,6 +100,8 @@ class Game
   end
   # Return an array containing symbols representing feedback
   def feedback
+      #Clear old intelligence so the bot doesn't act on stale data
+      @codebreaker.pretended_intelligence.clear if @codebreaker.is_a?(ComputerPlayer)
       guess_chars = @codebreaker.last_input.chars
       code_chars = @codemaker.code.chars
       @last_feedback = []
@@ -97,7 +116,8 @@ class Game
           @last_feedback << :red
           code_counts[char] -= 1
           matched_indices << i
-          @codebreaker.pretended_intelligence << {color: :red, position: i, value: char} if @codebreaker.class == ComputerPlayer
+          @codebreaker.pretended_intelligence[i] = {color: :red, value: char} if @codebreaker.is_a?(ComputerPlayer)
+          # binding.pry
         end
       end
 
@@ -108,7 +128,7 @@ class Game
         if code_counts[char].to_i > 0
           @last_feedback << :white
           code_counts[char] -= 1
-          @codebreaker.pretended_intelligence << {color: :white, position: i, value: char} if @codebreaker.class == ComputerPlayer
+          @codebreaker.pretended_intelligence[i] = {color: :white, value: char} if @codebreaker.is_a?(ComputerPlayer)
         end
       end
 
@@ -119,14 +139,10 @@ class Game
     @last_feedback == [:red, :red, :red, :red]
   end
   def take_guess
-    puts "Available colors: #{colors_map}"  if @codebreaker.class == HumanPlayer
+    puts "Available colors: #{colors_map}"  if @codebreaker.is_a?(HumanPlayer)
     @codebreaker.make_guess
   end
   def clear_screen
     system('clear') || system('cls')
   end
 end
-# g = Game.new
-# p g.feedback
-# g.greetings
-# g.ask_role

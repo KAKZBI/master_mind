@@ -41,42 +41,45 @@ end
 class ComputerPlayer < Player
   attr_accessor :pretended_intelligence
   def initialize
-    @pretended_intelligence = []
-    @frozen_indexes = []
-    @frozen_values = Array.new(4)
+    @pretended_intelligence = {}
+    # @frozen_indexes = []
+    # @frozen_values = Array.new(4)
   end
   def make_code
-    @code = (1..4).reduce(''){|str, i| str + rand(1..6).to_s}
+    @code = (1..4).reduce(''){|str, _| str + rand(1..6).to_s}
   end 
   def make_guess
-    return @last_input = (1..4).reduce(''){|str, i| str + rand(1..6).to_s} unless @pretended_intelligence.length > 0
+    return @last_input = make_code if @pretended_intelligence.empty?
     guess_array = self.use_pretended_intelligence
-    @last_input = guess_array.reduce('') do |str, char_color|
-      if char_color
-        str + char_color
-      else 
-        str + rand(1..6).to_s
-      end
-    end
+    @last_input = guess_array.join
   end
   def use_pretended_intelligence
     guess_array = Array.new(4) 
-    # @frozen_indexes.each_with_index{|pos, i| guess_array[i] = pos}
-    @pretended_intelligence.each_with_index do |hash, i|
-      next if @frozen_indexes.include?(hash[:position])
-      if hash[:color] == :red
-        @frozen_indexes << hash[:position]
-        @frozen_values[hash[:position]] = hash[:value]
-      elsif hash[:color] == :white
-        available_positions = @frozen_values.filter_map.with_index{|char_color, i| i unless char_color}
-        # Do not consider actual position
-        available_positions.delete(hash[:position])
-        # choose a new available position
-        new_position = available_positions.sample
-        guess_array[new_position] = hash[:value]
+    # RED PASS: Lock in the exact matches first
+    @pretended_intelligence.each do |index, info|
+      if info[:color] == :red
+        guess_array[index] = info[:value]
       end
     end
-    @frozen_values.each_with_index{|char_color, i| guess_array[i] = char_color}
+    # WHITE PASS: Try to move white pegs to NEW empty spots
+    @pretended_intelligence.each do |original_index, info|
+      next unless info[:color] == :white
+
+      # Find slots that are nil AND are NOT the original index (must move)
+      available_slots = guess_array.each_index.select do |i| 
+        guess_array[i].nil? && i != original_index 
+      end
+
+      # If we found a valid spot, move the white peg there
+      if available_slots.any?
+        new_spot = available_slots.sample
+        guess_array[new_spot] = info[:value]
+      end
+    end
+    #RANDOM PASS: Fill any remaining nils with random numbers
+    guess_array.map! do |val|
+      val.nil? ? rand(1..6).to_s : val
+    end
     guess_array
   end
 end
