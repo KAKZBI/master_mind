@@ -39,7 +39,7 @@ class HumanPlayer < Player
 end
 
 class ComputerPlayer < Player
-  attr_writer :pretended_intelligence
+  attr_accessor :pretended_intelligence
   def initialize
     @pretended_intelligence = []
     @frozen_indexes = []
@@ -52,7 +52,7 @@ class ComputerPlayer < Player
     return @last_input = (1..4).reduce(''){|str, i| str + rand(1..6).to_s} unless @pretended_intelligence.length > 0
     guess_array = self.use_pretended_intelligence
     @last_input = guess_array.reduce('') do |str, char_color|
-      if guess_array[i]
+      if char_color
         str + char_color
       else 
         str + rand(1..6).to_s
