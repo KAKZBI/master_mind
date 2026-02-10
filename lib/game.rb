@@ -87,6 +87,56 @@ class Game
     end
   end
   
+  def feedback
+      #Clear old intelligence so the bot doesn't act on stale data
+      @codebreaker.pretended_intelligence.clear if @codebreaker.is_a?(ComputerPlayer)
+      guess_chars = @codebreaker.last_input.chars
+      code_chars = @codemaker.code.chars
+      @last_feedback = []
+      
+      #hash for char occurences
+      code_counts = code_chars.tally 
+      matched_indices = []
+
+      # First Pass: Red Pegs
+      guess_chars.each_with_index do |char, i|
+        if char == code_chars[i]
+          @last_feedback << :red
+          code_counts[char] -= 1
+          matched_indices << i
+          @codebreaker.pretended_intelligence[i] = {color: :red, value: char} if @codebreaker.is_a?(ComputerPlayer)
+          # binding.pry
+        end
+      end
+
+      # Second Pass: White Pegs
+      guess_chars.each_with_index do |char, i|
+        next if matched_indices.include?(i)
+
+        if code_counts[char].to_i > 0
+          @last_feedback << :white
+          code_counts[char] -= 1
+          @codebreaker.pretended_intelligence[i] = {color: :white, value: char} if @codebreaker.is_a?(ComputerPlayer)
+        end
+      end
+
+      @last_feedback
+  end
+
+  def guesser_win?
+    @last_feedback.count(:red) == 4 # == [:red, :red, :red, :red]
+  end
+  def take_guess
+    puts "Available colors: #{colors_map}"  if @codebreaker.is_a?(HumanPlayer)
+    @codebreaker.make_guess
+  end
+  def colors_map 
+    (0...@colors.length).reduce('') do |str, i|
+      color_symbol = @colors[i]
+      background_color_symbol = "on_#{color_symbol.to_s}".to_sym
+      str + " #{i+1} ".send(background_color_symbol) + ' '
+    end
+  end
   def result
     clear_screen
     puts @board
@@ -124,49 +174,9 @@ class Game
     puts "----------------------"
   end
   # Return an array containing symbols representing feedback
-  def feedback
-      #Clear old intelligence so the bot doesn't act on stale data
-      @codebreaker.pretended_intelligence.clear if @codebreaker.is_a?(ComputerPlayer)
-      guess_chars = @codebreaker.last_input.chars
-      code_chars = @codemaker.code.chars
-      @last_feedback = []
-      
-      #hash for char occurences
-      code_counts = code_chars.tally 
-      matched_indices = []
-
-      # First Pass: Red Pegs
-      guess_chars.each_with_index do |char, i|
-        if char == code_chars[i]
-          @last_feedback << :red
-          code_counts[char] -= 1
-          matched_indices << i
-          @codebreaker.pretended_intelligence[i] = {color: :red, value: char} if @codebreaker.is_a?(ComputerPlayer)
-          # binding.pry
-        end
-      end
-
-      # Second Pass: White Pegs
-      guess_chars.each_with_index do |char, i|
-        next if matched_indices.include?(i)
-
-        if code_counts[char].to_i > 0
-          @last_feedback << :white
-          code_counts[char] -= 1
-          @codebreaker.pretended_intelligence[i] = {color: :white, value: char} if @codebreaker.is_a?(ComputerPlayer)
-        end
-      end
-
-      @last_feedback
-  end
+  
   # Determine if the Code guesser has won
-  def guesser_win?
-    @last_feedback == [:red, :red, :red, :red]
-  end
-  def take_guess
-    puts "Available colors: #{colors_map}"  if @codebreaker.is_a?(HumanPlayer)
-    @codebreaker.make_guess
-  end
+  
   def clear_screen
     system('clear') || system('cls')
   end
