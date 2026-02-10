@@ -15,6 +15,8 @@ class Game
   end
 
   def start
+    self.display_instructions 
+    clear_screen
     puts "\n************ COLOR MENU *************"
     puts @board.class.color_menu
     puts
@@ -23,11 +25,17 @@ class Game
     @codemaker.make_code
   end
   def greetings
-    puts "You can either be the code Maker or the code Breaker."
-    puts "Possible choices: \n"\
-         "Code Maker: m or M\n"\
-         "Code Breaker: b or B"
-    puts "Any other choice is invalid\n"
+    splash_screen
+    simulate_loading("Initializing Neural Network")
+    simulate_loading("Loading Security Protocols")
+    
+    puts "\nWelcome, Agent. Your objective is simple:".bold
+    puts "1. If you are the #{'MAKER'.red}, you must craft a code that is impossible to break."
+    puts "2. If you are the #{'BREAKER'.green}, you must decrypt the 4-digit sequence."
+    puts "\nAvailable roles:"
+    puts "[#{'M'.red}] - Code Maker (Human vs CPU)"
+    puts "[#{'B'.green}] - Code Breaker (CPU vs Human)"
+    puts "-------------------------------------------------------------\n"
   end
 
   def ask_role
@@ -67,7 +75,7 @@ class Game
       sleep(1)
       self.clear_screen
       puts @board
-      puts "Actual guess: #{guess}" if @codebreaker.is_a?(ComputerPlayer)
+      puts "Current Guess: #{guess}" if @codebreaker.is_a?(ComputerPlayer)
       sleep(2) if @codebreaker.is_a?(ComputerPlayer)
       if guesser_win?
         @verdict = "Code Breaker Wins"
@@ -75,28 +83,45 @@ class Game
       break
       end
       round += 1
-      @total_rounds = round
+      @total_rounds = [round, @board.size].min
     end
   end
+  
   def result
-    output = "\n--- GAME OVER ---\n"
-    output += "#{@verdict} in #{@total_rounds} rounds!\n"
-    output += "Final Code: #{@codemaker.code}\n"
-    output += "------------------\n"
-    output += "Guess History:\n"
+    clear_screen
+    puts @board
+    puts "\n"
+
+    # 1. Big Visual Header
+    if guesser_win?
+      puts "╔════════════════════════════════════╗".green
+      puts "║          ACCESS GRANTED            ║".green
+      puts "╚════════════════════════════════════╝".green
+    else
+      puts "╔════════════════════════════════════╗".red
+      puts "║          SYSTEM LOCKED             ║".red
+      puts "╚════════════════════════════════════╝".red
+    end
+
+    # 2. Reveal the Secret Code with colors
+    revealed_code = @codemaker.code.chars.map do |char| 
+      Board::BALLS[Board::COLOR_MAP[char]] 
+    end.join(" ")
     
+    puts "\nSECRET CODE: #{revealed_code}"
+    puts "TOTAL ATTEMPTS: #{@total_rounds}\n"
+
+    # 3. The Paper Trail (Visual History)
+    puts "\n" + "--- DECRYPTION LOG ---".bold.cyan
     @guess_history.each_with_index do |guess, i|
-      output += "Round #{i + 1}: #{guess}\n"
+      # Convert "1234" string into colored circles
+      colored_guess = guess.chars.map do |char| 
+        Board::BALLS[Board::COLOR_MAP[char]] 
+      end.join(" ")
+      
+      puts "Round #{format('%02d', i + 1)}: #{colored_guess}"
     end
-    
-    output
-  end
-  def colors_map 
-    (0...@colors.length).reduce('') do |str, i|
-      color_symbol = @colors[i]
-      background_color_symbol = "on_#{color_symbol.to_s}".to_sym
-      str + " #{i+1} ".send(background_color_symbol) + ' '
-    end
+    puts "----------------------"
   end
   # Return an array containing symbols representing feedback
   def feedback
@@ -144,5 +169,51 @@ class Game
   end
   def clear_screen
     system('clear') || system('cls')
+  end
+
+  def splash_screen
+    clear_screen
+    title = <<~ART
+      #{'  __  __           _                      _           _  '.magenta}
+      #{' |  \\/  |         | |                    (_)         | | '.magenta}
+      #{' | \\  / | __ _ ___| |_ ___ _ __ _ __ ___  _ _ __   __| | '.magenta}
+      #{' | |\\/| |/ _` / __| __/ _ \\ \'__| \'_ ` _ \\| | \'_ \\ / _` | '.white}
+      #{' | |  | | (_| \\__ \\ ||  __/ |  | | | | | | | | | | (_| | '.white}
+      #{' |_|  |_|\\__,_|___/\\__\\___|_|  |_| |_| |_|_|_| |_|\\__,_| '.white}
+                                                          
+    ART
+    puts title
+    puts "-------------------------------------------------------------".blue
+    puts "       STRICTLY CONFIDENTIAL - AUTHORIZED ACCESS ONLY        ".bold
+    puts "-------------------------------------------------------------".blue
+    puts "\n"
+  end
+  def simulate_loading(message)
+    print message
+    3.times do
+      sleep(0.5)
+      print ".".cyan
+    end
+    puts "\n"
+  end
+  def display_instructions
+    # Using the constants from your Board class for consistency
+    border = Board::HORIZONTAL * 50
+    
+    puts "\n#{Board::TOP_LEFT}#{border}#{Board::TOP_RIGHT}"
+    puts "#{Board::VERTICAL} #{'MISSION BRIEFING:'.bold.underline.cyan}#{' ' * 33}#{Board::VERTICAL}"
+    puts "#{Board::VERTICAL}#{' ' * 50}#{Board::VERTICAL}"
+    
+    # Explain the Pegs using the actual icons from your Board
+    puts "#{Board::VERTICAL} #{Board::PEGS[:red]} #{'RED PEG:'.red}   Correct Color & Correct Position   #{Board::VERTICAL}"
+    puts "#{Board::VERTICAL} #{Board::PEGS[:white]} #{'WHITE PEG:'.white} Correct Color but Wrong Position  #{Board::VERTICAL}"
+    puts "#{Board::VERTICAL} #{Board::PEGS[:empty]} #{'EMPTY:'.gray}     No match found for this slot      #{Board::VERTICAL}"
+    
+    puts "#{Board::VERTICAL}#{' ' * 50}#{Board::VERTICAL}"
+    puts "#{Board::VERTICAL} #{'GOAL:'.yellow} Crack the 4-digit code in #{Board.new.size} rounds. #{Board::VERTICAL}"
+    puts "#{Board::LOW_LEFT}#{border}#{Board::LOW_RIGHT}\n"
+    
+    print "Press #{'ENTER'.bold.green} to begin the mission..."
+    gets
   end
 end
