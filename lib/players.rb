@@ -1,4 +1,4 @@
-require 'pry-byebug'
+
 require 'colorize'
 class PermanentFailureError < StandardError; end
 class BadInputError < StandardError; end
@@ -9,7 +9,7 @@ end
 
 class HumanPlayer < Player
   def get_input
-    @last_input = gets.chomp#.to_i
+    @last_input = gets.chomp
   end
   def make_guess
     max_attempts = 3
@@ -42,8 +42,6 @@ class ComputerPlayer < Player
   attr_accessor :pretended_intelligence
   def initialize
     @pretended_intelligence = {}
-    # @frozen_indexes = []
-    # @frozen_values = Array.new(4)
   end
   def make_code
     @code = (1..4).reduce(''){|str, _| str + rand(1..6).to_s}

@@ -1,21 +1,20 @@
 require_relative 'players'
 require_relative 'board'
-require 'pry-byebug'
+
 
 class BadRoleChoiceError < StandardError; end
 class Game
   attr_reader :board
   def initialize()
-    self.greetings
-    self.set_roles(self.ask_role)
-    # binding.pry
+    greetings
+    set_roles(self.ask_role)
     @board = Board.new
     @colors = @board.class.colors
     @last_feedback = []
   end
 
   def start
-    self.display_instructions 
+    display_instructions 
     clear_screen
     puts "\n************ COLOR MENU *************"
     puts @board.class.color_menu
@@ -73,7 +72,7 @@ class Game
       @board.place_colors(round - 1, guess)
       @board.place_pegs(round - 1, self.feedback)
       sleep(1)
-      self.clear_screen
+      clear_screen
       puts @board
       puts "Current Guess: #{guess}" if @codebreaker.is_a?(ComputerPlayer)
       sleep(2) if @codebreaker.is_a?(ComputerPlayer)
