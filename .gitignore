@@ -1,0 +1,12 @@
+# Ignore the raw recording files (since they are uploaded now)
+*.cast
+
+# Ignore local Ruby version settings
+.ruby-version
+
+# Ignore temporary/backup files
+*.swp
+.DS_Store
+
+# If you ever install gems locally to a vendor folder
+/vendor/bundle
