@@ -155,7 +155,7 @@ class Game
 
     # 2. Reveal the Secret Code with colors
     revealed_code = @codemaker.code.chars.map do |char| 
-      Board::BALLS[Board::COLOR_MAP[char]] 
+      char.colorize(Board::COLOR_MAP[char])
     end.join(" ")
     
     puts "\nSECRET CODE: #{revealed_code}"
@@ -164,12 +164,15 @@ class Game
     # 3. The Paper Trail (Visual History)
     puts "\n" + "--- DECRYPTION LOG ---".bold.cyan
     @guess_history.each_with_index do |guess, i|
-      # Convert "1234" string into colored circles
+      # Format round number (01, 02)
+      round_num = format('%02d', i + 1)
+      
+      # Use Colored Digits
       colored_guess = guess.chars.map do |char| 
-        Board::BALLS[Board::COLOR_MAP[char]] 
+        char.colorize(Board::COLOR_MAP[char])
       end.join(" ")
       
-      puts "Round #{format('%02d', i + 1)}: #{colored_guess}"
+      puts "Round #{round_num}: #{colored_guess}"
     end
     puts "----------------------"
   end

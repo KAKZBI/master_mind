@@ -6,7 +6,7 @@ begin
   master_mind = Game.new
   master_mind.start
   master_mind.run
-  puts master_mind.result
+  master_mind.result
 rescue PermanentFailureError => e 
   puts e.message
   exit(1)
