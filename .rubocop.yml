@@ -1,0 +1,37 @@
+# The behavior of RuboCop can be controlled via the .rubocop.yml
+# configuration file. It makes it possible to enable/disable
+# certain cops (checks) and to alter their behavior if they accept
+# any parameters. The file can be placed either in your home
+# directory or in some project directory.
+#
+# RuboCop will start looking for the configuration file in the directory
+# where the inspected file is and continue its way up to the root directory.
+#
+# See https://docs.rubocop.org/rubocop/configuration
+AllCops:
+  NewCops: enable
+  # Exclude auto-generated files or folders you don't want checked
+  Exclude:
+    - 'vendor/**/*'
+    - 'spec/**/*'
+
+# We don't need a documentation comment for every single class/module
+Style/Documentation:
+  Enabled: false
+
+# We don't need to freeze every string literal in a simple game
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Allow methods to be a bit longer (default is 10 lines, which is too short for game logic)
+Metrics/MethodLength:
+  Max: 25
+
+# Allow classes to be longer (Game class gets big naturally)
+Metrics/ClassLength:
+  Max: 250
+
+# Allow lines to be 120 characters long (default is 80)
+Layout/LineLength:
+  Max: 120
+
