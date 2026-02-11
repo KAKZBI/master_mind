@@ -1,7 +1,5 @@
 require_relative 'lib/game'
 
-puts 'Welcome to the Master Mind game'
-
 begin
   master_mind = Game.new
   master_mind.start
