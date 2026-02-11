@@ -57,7 +57,7 @@ class Board
     # Map each row into a formatted string
     rows = @grid.map do |row|
       balls = row[:balls].join(' ')
-      pegs = row[:pegs].join('')
+      pegs = row[:pegs].join
       "#{VERTICAL} #{balls} #{VERTICAL} #{pegs} #{VERTICAL}"
     end
     # Return a well formated grid
@@ -70,7 +70,7 @@ class Board
 
   # Place colred balls on board
   def place_colors(index, input)
-    input_array = input.split('')
+    input_array = input.chars
     row = @grid[index]
     input_array.each_with_index do |digit, i|
       row[:balls][i] = BALLS[COLOR_MAP[digit]]
@@ -79,7 +79,7 @@ class Board
 
   # Provide feedack
   def place_pegs(index, feedback)
-    return unless feedback.length > 0
+    return unless feedback.length.positive?
 
     row = @grid[index]
     feedback.each_with_index do |sym, idx|

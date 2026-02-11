@@ -42,7 +42,7 @@ class Game
   def ask_role
     max_attempts = 3
     begin
-      raise PermanentFailureError, 'Sorry - Game aborted' unless max_attempts > 0
+      raise PermanentFailureError, 'Sorry - Game aborted' unless max_attempts.positive?
 
       print 'Choose your role - [M]aker or [B]reaker: '
       choice = gets.chomp.downcase
@@ -51,8 +51,8 @@ class Game
       choice
     rescue BadRoleChoiceError => e
       max_attempts -= 1
-      puts e.message.colorize(:red) if max_attempts > 0
-      puts "Trying #{max_attempts} more times" if max_attempts > 0
+      puts e.message.colorize(:red) if max_attempts.positive?
+      puts "Trying #{max_attempts} more times" if max_attempts.positive?
       retry
     end
   end
@@ -117,7 +117,7 @@ class Game
     guess_chars.each_with_index do |char, i|
       next if matched_indices.include?(i)
 
-      next unless code_counts[char].to_i > 0
+      next unless code_counts[char].to_i.positive?
 
       @last_feedback << :white
       code_counts[char] -= 1
