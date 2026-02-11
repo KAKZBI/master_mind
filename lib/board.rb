@@ -1,9 +1,8 @@
 require 'colorize'
 
 class Board
-
   # The "Source of Truth" - 6 fixed colors
-  AVAILABLE_COLORS = [:red, :green, :blue, :yellow, :magenta, :white].freeze
+  AVAILABLE_COLORS = %i[red green blue yellow magenta white].freeze
 
   # Automatically build the BALLS hash using the colors above
   BALLS = AVAILABLE_COLORS.each_with_object({ empty: "\u25ef" }) do |color, hash|
@@ -30,6 +29,7 @@ class Board
   LOW_RIGHT = "\u2518"
 
   attr_reader :size
+
   def initialize(size = 12)
     @grid = create_grid(size)
     @size = size
@@ -47,25 +47,27 @@ class Board
   end
 
   def self.colors
-    AVAILABLE_COLORS 
+    AVAILABLE_COLORS
   end
-  
+
   def to_s
     header = TOP_LEFT + (HORIZONTAL * 16) + TOP_RIGHT
     footer = LOW_LEFT + (HORIZONTAL * 16) + LOW_RIGHT
-    
+
     # Map each row into a formatted string
     rows = @grid.map do |row|
-      balls = row[:balls].join(" ")
-      pegs = row[:pegs].join("")
+      balls = row[:balls].join(' ')
+      pegs = row[:pegs].join('')
       "#{VERTICAL} #{balls} #{VERTICAL} #{pegs} #{VERTICAL}"
     end
     # Return a well formated grid
     [header, rows, footer].flatten.join("\n")
   end
+
   def self.color_menu
-    COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(" | ")
+    COLOR_MAP.map { |num, color| "#{num}: #{color.to_s.colorize(color)}" }.join(' | ')
   end
+
   # Place colred balls on board
   def place_colors(index, input)
     input_array = input.split('')
@@ -74,13 +76,14 @@ class Board
       row[:balls][i] = BALLS[COLOR_MAP[digit]]
     end
   end
-    # Provide feedack
+
+  # Provide feedack
   def place_pegs(index, feedback)
     return unless feedback.length > 0
+
     row = @grid[index]
     feedback.each_with_index do |sym, idx|
       row[:pegs][idx] = PEGS[sym]
     end
   end
 end
-
